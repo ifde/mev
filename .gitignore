@@ -1,0 +1,12 @@
+# External repository
+/dex/
+
+# Environment files
+.env
+.env.*
+
+# Dotfiles and dot-directories
+.*
+!.gitignore 
+
+/AGENTS.md
