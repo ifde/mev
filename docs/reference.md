@@ -1,20 +1,22 @@
 # Референсные репозитории и проекты
 
-Этот файл собирает проекты, репозитории и документацию, полезные для проекта защитных Uniswap v4 hooks для LP: динамические комиссии до swap, интернализация post-swap арбитража и Rust CLI для настройки маршрутов.
+## MEV internalization 
 
-## Ближайшие референсы для afterSwap MEV internalization
+- [База про MEV](https://medium.com/coinmonks/where-mev-actually-comes-from-78f9870f33bd) 
 
 - [MEV-X Homelander — GitHub](https://github.com/mev-x-project/MEV-X-Homelander), [документация](https://mev-x-project.github.io/Homelander-docs/)
 
-  Главный референс. Модуль атомарной интернализации MEV для DEX, использующий post-swap callbacks в Uniswap v4 и Algebra. Его архитектура совпадает с предлагаемой: plugin/hook → Router с заранее подготовленными маршрутами → Executor → Profit Distributor. В публичном репозитории есть hook-facing часть и интерфейсы; полный движок поиска маршрутов не опубликован.
-
 - [What The Hook](https://www.whatthehook.io/)
 
-  Пример развёрнутого Uniswap v4 hook, который захватывает арбитраж, созданный swap, и распределяет прибыль между LP, treasury, пользователем и referral. Хороший продуктовый референс для простой логики: swap создаёт ценовой разрыв → hook закрывает разрыв → прибыль распределяется. Открытый Solidity-репозиторий не найден.
+  Пример развёрнутого Uniswap v4 hook, который захватывает арбитраж, созданный swap, и распределяет прибыль между LP, treasury, пользователем и referral. 
 
 - [Reflex MEV — plugin integration](https://docs.reflexmev.com/integration/plugin-based)
 
-  Документация по захвату MEV через `afterSwap` plugin для Uniswap v4, Algebra и PancakeSwap Infinity. Полезна для минимального интерфейса hook-а: пороги размера сделки, `try/catch`, `minProfit` и событие `BackrunExecuted`.
+  Документация по захвату MEV через `afterSwap` plugin для Uniswap v4, Algebra и PancakeSwap Infinity. Полезна для минимального интерфейса хука: пороги размера сделки, `try/catch`, `minProfit` и событие `BackrunExecuted`.
+
+- [arb-hook](https://github.com/sterlingcrispin/arb-hook)
+
+  `afterSwap`-арбитраж: v4 target pool, V3 reference pool, flash loan и проверка фактической прибыли.
 
 ## Uniswap v4 и Solidity hooks
 
@@ -72,6 +74,28 @@
 
   Более крупный Rust MEV bot с графовым поиском, mempool backrun и симуляцией на `revm`. Полезен только как архитектурный референс: его масштаб намеренно выходит за рамки проекта.
 
+------------ 
+
+- [Artemis](https://github.com/paradigmxyz/artemis), [разбор](https://mteam.space/posts/how-to-use-the-artemis-mev-framework/). Супер статья! 
+
+Rust framework с разделением для поиска MEV
+
+- [mev-inspect-rs](https://github.com/flashbots/mev-inspect-rs)
+
+  Исторический MEV-анализ через archive/tracing node и PostgreSQL.
+
+- [rusty-sando](https://github.com/mouseless0x/rusty-sando)
+
+  REVM-симуляции и подбор оптимального входного объёма. V2/V3 sandwich bot.
+
+- [subway-rs](https://github.com/refcell/subway-rs)
+
+  Учебный Rust bot: decode pending tx, simulation, gas accounting и bundle execution.
+
+- [REVM + Alloy + Anvil arbitrage](https://hotpath.rs/blog/revm-alloy-anvil-arbitrage), [код](https://github.com/pawurb/univ3-revm-arbitrage). Супер статья! 
+
+  REVM `CacheDB` для локального перебора. Anvil для fork-validation.
+
 ## Динамические комиссии и LP-логика
 
 - [Dex-Dynamic-Fee](https://github.com/swnirk/Dex-Dynamic-Fee)
@@ -80,7 +104,11 @@
 
 - [REFLEX adaptive fee hook](https://reflexsize.agency/docs)
 
-  Альтернативная политика динамической комиссии. Хранит состояние рынка в EMA и увеличивает комиссию для неожиданной по размеру и направлению сделки. Полезна как источник идей для `ILTrimmingFee`.
+  Альтернативная политика динамической комиссии. Хранит состояние рынка в EMA и увеличивает комиссию для неожиданной по размеру и направлению сделки. Источник идей для `ILTrimmingFee`.
+
+- [Spry contracts](https://github.com/SpryFinance/spry-contracts), [subgraph](https://github.com/SpryFinance/spry-subgraph)
+
+  Full-range v4 dynamic-fee hook, CREATE2 deployment и индексатор `Initialize`/`Swap`/ticks.
 
 ## Архитектурные и исследовательские референсы
 
@@ -90,9 +118,9 @@
 
 - [Uniswap Smart Order Router](https://github.com/Uniswap/smart-order-router)
 
-  Роутер для выгодных пользовательских swap. Это не MEV searcher и его не нужно копировать в проект, но он полезен для понимания представления маршрутов и оценки quote.
+  Роутер для выгодных пользовательских swap. Это не MEV searcher. 
 
 - [Hookr](https://hookr.fun/)
 
-  Пример концепции composable hook blocks: dynamic fees, LP rewards и arbitrage recapture. Поддерживает идею библиотеки, но проект лучше строить как набор Solidity base contracts и конкретных hooks, а не как no-code конструктор.
+  Пример концепции composable hook blocks: dynamic fees, LP rewards и arbitrage recapture. Конструктор 
 
