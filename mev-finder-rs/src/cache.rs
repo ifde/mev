@@ -5,17 +5,9 @@ use std::{
 
   use alloy::primitives::keccak256;
   use anyhow::{Context, Result};
-  use serde::{de::DeserializeOwned, Deserialize, Serialize};
+  use serde::{de::DeserializeOwned, Serialize};
 
   const CACHE_ROOT: &str = "cache";
-  pub const CACHE_SCHEMA_VERSION: u32 = 1;
-
-  #[derive(Serialize, Deserialize)]
-  pub struct CacheEntry<Request, ResultValue> {
-      pub schema_version: u32,
-      pub request: Request,
-      pub result: ResultValue,
-  }
 
   pub fn path_for_request<Request: Serialize>(
       component: &str,
@@ -37,7 +29,7 @@ use std::{
   ) -> Result<Option<Value>> {
       match fs::read_to_string(path) {
           Ok(contents) => {
-              let value = serde_json::from_str(&contents)
+              let value = serde_json::from_str(&contents) // получаем исходную Rust структуру из JSON 
                   .with_context(|| format!("failed to decode cache file {}", path.display()))?;
 
               Ok(Some(value))
@@ -60,7 +52,7 @@ use std::{
           .parent()
           .context("cache path must have a parent directory")?;
 
-      fs::create_dir_all(parent)
+      fs::create_dir_all(parent) // создаем папку для кеша вместе со всеми отсутствующими папками 
           .with_context(|| format!("failed to create cache directory {}", parent.display()))?;
 
       let contents =

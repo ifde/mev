@@ -32,8 +32,10 @@ pub enum Command {
     CheckRpc(CheckRpcArgs), 
     InspectProxyPool(InspectProxyPoolArgs), 
     FindProxyPool(FindProxyPoolArgs), 
-    ListProxySwaps(ListProxySwapsArgs), 
+    ListProxyTransactions(ListProxyTransactionsArgs), 
     FindReferencePools(FindReferencePoolsArgs), 
+    FindTwoPoolRoutes(FindTwoPoolRoutesArgs),
+    BuildEvaluationPlan(BuildEvaluationPlanArgs),
     QuoteTwoPoolCycle(QuoteTwoPoolCycleArgs), 
 }
 
@@ -70,6 +72,21 @@ pub struct InspectProxyPoolArgs {
 
 #[derive(Args)]
 pub struct FindProxyPoolArgs {
+    #[arg(long, env = "THE_GRAPH_SUBGRAPH_URL_V4_ETH_MAINNET")]
+    pub subgraph_url: String,
+
+    #[arg(long, env = "THE_GRAPH_API_KEY")]
+    pub api_key: String,
+
+    #[arg(long, env = "MAINNET_RPC_URL")]
+    pub rpc_url: String,
+
+    #[arg(long, env = "V4_STATE_VIEW_ETH_MAINNET")]
+    pub state_view: Address,
+
+    #[arg(long)]
+    pub analysis_block: u64,
+
     #[arg(long)]
     pub token_a: Address,
 
@@ -78,7 +95,13 @@ pub struct FindProxyPoolArgs {
 } 
 
 #[derive(Args)]
-pub struct ListProxySwapsArgs {
+pub struct ListProxyTransactionsArgs {
+    #[arg(long, env = "THE_GRAPH_SUBGRAPH_URL_V4_ETH_MAINNET")]
+    pub subgraph_url: String,
+
+    #[arg(long, env = "THE_GRAPH_API_KEY")]
+    pub api_key: String,
+
     #[arg(long, env = "MAINNET_RPC_URL")]
     pub rpc_url: String,
 
@@ -90,6 +113,12 @@ pub struct ListProxySwapsArgs {
 
     #[arg(long)]
     pub token_b: Address,
+
+    #[arg(long, env = "V4_STATE_VIEW_ETH_MAINNET")]
+    pub state_view: Address,
+
+    #[arg(long)]
+    pub analysis_block: u64,
 
     #[arg(long)]
     pub from_block: u64,
@@ -105,9 +134,6 @@ pub struct FindReferencePoolsArgs {
 
     #[arg(long, env = "THE_GRAPH_API_KEY")]
     pub api_key: String,
-
-    #[arg(long, env = "V4_POOL_MANAGER")]
-    pub pool_manager: Address,
 
     #[arg(long)]
     pub token_a: Address,
@@ -138,4 +164,29 @@ pub struct QuoteTwoPoolCycleArgs {
 
     #[arg(long)]
     pub amount_in: u128,
+}
+
+#[derive(Args)]
+pub struct FindTwoPoolRoutesArgs {
+    #[command(flatten)]
+    pub reference_search: FindReferencePoolsArgs,
+
+}
+
+#[derive(Args)]
+pub struct BuildEvaluationPlanArgs {
+    #[command(flatten)]
+    pub reference_search: FindReferencePoolsArgs,
+
+    #[arg(long, env = "V4_POOL_MANAGER")]
+    pub pool_manager: Address,
+
+    #[arg(long)]
+    pub from_block: u64,
+
+    #[arg(long)]
+    pub to_block: u64,
+
+    #[arg(long, default_value = "output.json")]
+    pub output: String,
 }
