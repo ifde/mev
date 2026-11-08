@@ -6,13 +6,15 @@
 
 ## Название:
 
-> A Library of Smart Contracts for Decentralized Exchages Designed to Reduce Impermanent Loss
+> A Library of Smart Contracts for Decentralized Exchanges Designed to Reduce Impermanent Loss
 
 По-русски:
 
 > Библиотека смарт-контрактов децентрализованных бирж для снижения непостоянных потерь 
 
 Более подробно: Библиотека смарт-контрактов децентрализованных бирж для снижения непостоянных потерь поставщиков ликвидности.  
+
+Научный Руководитель: Янович Юрий Александрович, доцент, к.ф-м.н. 
 
 ----- 
 

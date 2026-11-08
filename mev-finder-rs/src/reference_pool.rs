@@ -3,8 +3,9 @@
 // ============================== 
 
 use alloy::primitives::{Address, B256};
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ReferencePool {
     pub pool_id: B256,
     pub currency0: Address,

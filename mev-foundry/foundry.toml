@@ -11,3 +11,8 @@ remappings = [
     "@uniswap/v4-periphery/=lib/v4-periphery/"
 ] 
 
+fs_permissions = [
+    { access = "read", path = "./test/fixtures" },
+    { access = "read-write", path = "./test/results" }
+]
+
