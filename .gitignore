@@ -3,7 +3,9 @@
 
 # Environment files
 .env
-.env.*
+.env.* 
+# не исключаем пример .env файла 
+!.env.example
 
 # Dotfiles and dot-directories
 .*
