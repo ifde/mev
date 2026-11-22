@@ -16,3 +16,8 @@ fs_permissions = [
     { access = "read-write", path = "./test/results" }
 ]
 
+[profile.il]
+# Budget for the enclosing multi-block Forge harness; each Router probe has its own limit.
+gas_limit = 1000000000000
+fs_permissions = [{ access = "read-write", path = "../mev-finder-rs/runs" }]
+

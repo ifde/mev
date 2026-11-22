@@ -3,11 +3,8 @@ use anyhow::Result;
 use crate::{
     cli::FindReferencePoolsArgs,
     constants::{MAX_PROXY_POOL_CANDIDATES, MAX_REFERENCE_POOL_CANDIDATES},
-    proxy_pool::{find_proxy_pool, FindProxyPoolRequest},
-    reference_search::{
-        find_validated_reference_pools,
-        ReferenceSearchRequest,
-    },
+    find_proxy_pool::{FindProxyPoolRequest, find_proxy_pool},
+    find_reference_pools::{ReferenceSearchRequest, find_validated_reference_pools},
 };
 
 pub async fn run(args: FindReferencePoolsArgs) -> Result<()> {
@@ -19,6 +16,7 @@ pub async fn run(args: FindReferencePoolsArgs) -> Result<()> {
         analysis_block: args.analysis_block,
         token_a: args.token_a,
         token_b: args.token_b,
+        proxy_pool_id: None,
         max_candidates: MAX_PROXY_POOL_CANDIDATES,
     })
     .await?;

@@ -42,6 +42,37 @@ pub enum Command {
     ExecuteTransaction(ExecuteTransactionArgs),
     ExecutePlan(ExecutePlanArgs),
     SelectRoutes(SelectRoutesArgs),
+    Backtest(BacktestArgs),
+}
+
+#[derive(Args, serde::Serialize)]
+pub struct BacktestArgs {
+    #[arg(long)]
+    pub run_dir: std::path::PathBuf,
+    #[arg(long)]
+    pub end_block: u64,
+    #[arg(long, default_value_t = usize::MAX)]
+    pub max_transactions: usize,
+    #[arg(long, default_value_t = 1)]
+    pub route_limit: usize,
+    #[arg(long, default_value_t = 500_000)]
+    pub attempt_gas: u64,
+    /// Сколько ликвидности добавляем в таргет пул при деплое. По умолчанию - вся ликвидность прокси пула на блоке analysis_block. 
+    #[arg(long)]
+    pub liquidity: Option<u128>,
+    #[arg(long, allow_hyphen_values = true)]
+    pub tick_lower: Option<i32>,
+    #[arg(long, allow_hyphen_values = true)]
+    pub tick_upper: Option<i32>,
+    #[arg(long, default_value_t = 0)]
+    // комиссия таргет пула 
+    pub target_fee: u32,
+    #[arg(long, default_value_t = 300)] 
+    // комиссия бейзлайн пула (с которым будем сравнивать, по умолчанию - 0)  
+    pub baseline_fee: u32,
+    #[arg(long, env = "MAINNET_RPC_URL", hide_env_values = true)]
+    #[serde(skip)]
+    pub rpc_url: String,
 }
 
 #[derive(Args)]

@@ -3,7 +3,7 @@ use anyhow::Result;
 use crate::{
     cli::FindProxyPoolArgs,
     constants::MAX_PROXY_POOL_CANDIDATES,
-    proxy_pool::{find_proxy_pool, FindProxyPoolRequest},
+    find_proxy_pool::{FindProxyPoolRequest, find_proxy_pool},
 };
 
 pub async fn run(args: FindProxyPoolArgs) -> Result<()> {
@@ -15,6 +15,7 @@ pub async fn run(args: FindProxyPoolArgs) -> Result<()> {
         analysis_block: args.analysis_block,
         token_a: args.token_a,
         token_b: args.token_b,
+        proxy_pool_id: None,
         max_candidates: MAX_PROXY_POOL_CANDIDATES,
     })
     .await?;

@@ -6,6 +6,7 @@
 // мы их подключаем, чтобы Rust не собирал все файлы.
 // подключение = означает, что становятся доступны все структуры / функции внутри модуля
 mod build_plan;
+mod backtest;
 mod cache;
 mod chains;
 mod cli; // подключить src/cli.rs
@@ -47,5 +48,6 @@ async fn main() -> Result<()> {
         Command::ExecuteTransaction(args) => commands::execute_transaction::run(args).await,
         Command::ExecutePlan(args) => commands::execute_plan::run(args).await,
         Command::SelectRoutes(args) => commands::select_routes::run(args),
+        Command::Backtest(args) => commands::backtest::run(args).await,
     }
 }
