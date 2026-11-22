@@ -1,23 +1,19 @@
 // ==============================
-// Возвращает вектор найденных маршрутов 
-// Сейчас ищет только пути из двух пулов (наш таргет пул и один референс пул). 
-// Для каждого пути возвращается 4 маршрута: 2 направления (прямое и обратное) x входной токен (token0 / token1) 
-// ============================== 
+// Возвращает вектор найденных маршрутов
+// Сейчас ищет только пути из двух пулов (наш таргет пул и один референс пул).
+// Для каждого пути возвращается 4 маршрута: 2 направления (прямое и обратное) x входной токен (token0 / token1)
+// ==============================
 
-use alloy::{
-    primitives::{
-        aliases::{I24, U24},
-        Address,
-        B256,
-        Bytes,
-    },
+use alloy::primitives::{
+    Address, B256, Bytes,
+    aliases::{I24, U24},
 };
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    proxy_pool::ProxyPool,
-    reference_pool::ReferencePool,
+    find_proxy_pool::ProxyPool,
+    find_reference_pools::ReferencePool,
     v4::{PathKey, QuoteExactParams},
 };
 
@@ -71,11 +67,8 @@ impl From<&ReferencePool> for RouteHop {
 }
 
 // Для каждого reference-пула строим все четыре статические топологии.
-// Выбор двух маршрутов для конкретного user swap делает orchestrator.
-pub fn find_two_pool_routes(
-    proxy: &ProxyPool,
-    references: &[ReferencePool],
-) -> Result<Vec<Route>> {
+// Выбор двух маршрутов для конкретного user swap делает build_plan.
+pub fn find_two_pool_routes(proxy: &ProxyPool, references: &[ReferencePool]) -> Result<Vec<Route>> {
     let mut routes = Vec::with_capacity(references.len() * 4);
 
     for reference in references {
@@ -83,9 +76,7 @@ pub fn find_two_pool_routes(
             bail!("proxy pool and reference pool must be different");
         }
 
-        if proxy.currency0 != reference.currency0
-            || proxy.currency1 != reference.currency1
-        {
+        if proxy.currency0 != reference.currency0 || proxy.currency1 != reference.currency1 {
             bail!("proxy pool and reference pool must have the same token pair");
         }
 
@@ -114,10 +105,7 @@ pub fn find_two_pool_routes(
     Ok(routes)
 }
 
-pub fn quote_exact_params(
-    route: &Route,
-    amount_in: u128,
-) -> Result<QuoteExactParams> {
+pub fn quote_exact_params(route: &Route, amount_in: u128) -> Result<QuoteExactParams> {
     if amount_in == 0 {
         bail!("amount_in must be greater than zero");
     }

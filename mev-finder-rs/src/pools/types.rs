@@ -1,6 +1,6 @@
 // ==============================
-// Типы PoolCandidate 
-// ============================== 
+// Типы PoolCandidate
+// ==============================
 
 use alloy::primitives::{Address, B256};
 use serde::{Deserialize, Serialize};
